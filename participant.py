@@ -163,7 +163,7 @@ class Participant:
         
         print(f"  📋 Transaction data: {transaction_data}")
         print(f"  ⏳ Waiting for the voting decision...")
-        print(f"  Please enter the command: cancommit vote yes 或 cancommit vote no")
+        print(f"  Please enter the command: cancommit vote yes or cancommit vote no")
         
         # Start a thread to wait for the vote. If it times out after 60 seconds, it will automatically vote for NO
         threading.Thread(
@@ -200,7 +200,7 @@ class Participant:
 
         print(f"  📋 Transaction data: {transaction_data}")
         print(f"  ⏳ Waiting for the voting decision...")
-        print(f"  Please enter the command: precommit vote yes 或 precommit vote no")
+        print(f"  Please enter the command: precommit vote yes or precommit vote no")
 
         # Start a thread to wait for the vote. If it times out after 60 seconds, it will automatically vote for NO
         threading.Thread(
@@ -738,4 +738,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
