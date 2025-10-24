@@ -1,0 +1,5 @@
+#3PC Protocol demonstration program dependencies
+# Python 3.8+
+
+# This project only uses the Python standard library and does not require any additional dependencies
+
