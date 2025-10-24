@@ -1,5 +1,5 @@
 """
-2PC协议消息定义和常量
+3PC协议消息定义和常量
 """
 import json
 from enum import Enum
@@ -57,4 +57,5 @@ class Message:
     
     def __repr__(self):
         return f"Message({self.msg_type.value}, {self.transaction_id})"
+
 
