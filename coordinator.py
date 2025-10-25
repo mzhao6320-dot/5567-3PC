@@ -1,5 +1,5 @@
 """
-3PC - Coordinator
+3PC Protocol - Coordinator
 """
 import socket
 import threading
