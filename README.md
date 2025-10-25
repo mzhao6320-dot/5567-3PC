@@ -1,217 +1,214 @@
-# 使用示例
+# Usage Examples
 
-## 完整演示流程
+## Complete Demonstration Process
 
-### 步骤1: 打开4个终端窗口
+### Step 1: Open 4 Terminal Windows
 
-#### 终端1 - 启动协调者
+#### Terminal 1 - Start the Coordinator
 ```bash
 cd E:\5567-Lab-2
 python coordinator.py
 ```
 
-你会看到：
+You will see:
 ```
-✓ 协调者启动在 localhost:5000
-============================================================
+✓ The coordinator is started on localhost:5000
+==============================================================
 
-可用命令:
-        print("\nAvailable commands:")
-        print("  list    - List all the participants")
-        print("  tx      - Initiate new transactions")
-        print("  crash   - Simulated crash")
-        print("  recover - Recover from the crash")
-        print("  status  - View the transaction status")
-        print("  quit    - Exit")
+Available Commands:
+print("\nAvailable commands:")
+print(" list - List all the participants")
+print(" tx - Initiate new transactions")
+print(" crash - Simulated crash")
+print(" recover - Recover from the crash")
+print(" status - View the transaction status")
+print(" quit - Exit")
 
 coordinator>
 ```
 
-#### 终端2 - 启动参与者P1
+#### Terminal 2 - Start participant P1
 ```bash
 cd E:\5567-Lab-2
 python participant.py P1 6001
 ```
 
-你会看到：
+You will see:
 ```
-✓ 参与者 'P1' 启动在 localhost:6001
-✓ 已注册到协调者 localhost:5000
-============================================================
+✓ Participant 'P1' started at localhost:6001
+✓ Registered with coordinator localhost:5000
+=============================================================
 
-可用命令:
-        print("\nAvailable commands:")
-        print("  status            - Check the status")
-        print("  data              - View the submitted data")
-        print("  cancommit vote yes/no     - Vote on the CanCommit voting transaction")
-        print("  precommit vote yes/no     - Vote on the PreCommit voting transaction")
-        print("  ack commit/abort  - Confirm COMMIT or ABORT")
-        print("  crash             - Simulated crash")
-        print("  recover           - Recover from the collapse")
-        print("  fail              - Set the failure rate")
-        print("  quit              - Exit")
+Available commands:
+print("\nAvailable commands:")
+print(" status - Check the status")
+print(" data - View the submitted data")
+print(" cancommit vote yes/no - Vote on the CanCommit voting transaction")
+print(" precommit vote yes/no - Vote on the PreCommit voting transaction")
+print(" ack commit/abort - Confirm COMMIT or ABORT")
+print(" crash - Simulated crash")
+print(" recover - Recover from the collapse")
+print(" fail - Set the failure rate")
+print(" quit - Exit")
 
 P1>
 ```
 
-#### 终端3 - 启动参与者P2
+#### Terminal 3 - Start participant P2
 ```bash
 cd E:\5567-Lab-2
 python participant.py P2 6002
 ```
 
-#### 终端4 - 启动参与者P3
+#### Terminal 4 - Start participant P3
 ```bash
 cd E:\5567-Lab-2
 python participant.py P3 6003
 ```
 
-### 步骤2: 查看已注册的参与者
+### Step 2: View registered participants
 
-在协调者终端输入：
+In the coordinator terminal, enter:
 ```
 coordinator> list
 ```
 
-输出：
+Output:
 ```
-已注册参与者 (3):
-  - P1 (localhost:6001)
-  - P2 (localhost:6002)
-  - P3 (localhost:6003)
+Registered participants (3):
+- P1 (localhost:6001)
+- P2 (localhost:6002)
+- P3 (localhost:6003)
 ```
 
-### 步骤3: 发起一个成功的事务
+### Step 3: Initiate a successful transaction
 
-在协调者终端：
+On the coordinator terminal:
 ```
 coordinator> tx
-请输入事务数据 (格式: key=value, 例: account=alice,amount=100):
+Please enter the transaction data (format: key=value, example: account=alice,amount=100):
 data> account=alice,amount=100,operation=deposit
 ```
 
-你会看到完整的3PC流程：
+You will see the complete 3PC process:
 ```
-============================================================
-开始新事务: a1b2c3d4
-事务数据: {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
-参与者数量: 3
+= ... 3
 ============================================================
 
-[阶段 1/3] CanCommit阶段 (CanCommit)
+[Phase 1/3] CanCommit Phase (CanCommit)
 ------------------------------------------------------------
-→ 发送CanCommit到 P1... ✓ VOTE_YES
-→ 发送CanCommit到 P2... ✓ VOTE_YES
-→ 发送CanCommit到 P3... ✓ VOTE_YES
+→ Send CanCommit to P1... ✓ VOTE_YES
+→ Send CanCommit to P2... ✓ VOTE_YES
+→ Send CanCommit to P3... ✓ VOTE_YES
 
-投票结果: 3/3 同意
+Voting Result: 3/3 Agree
 
-[阶段 2/3] PreCommit阶段 (PreCommit)
+[Phase 2/3] PreCommit Phase (PreCommit)
 ------------------------------------------------------------
-→ 发送PreCommit到 P1... ✓ VOTE_YES
-→ 发送PreCommit到 P2... ✓ VOTE_YES
-→ 发送PreCommit到 P3... ✓ VOTE_YES
+→ Send PreCommit to P1... ✓ VOTE_YES
+→ Send PreCommit to P2... ✓ VOTE_YES
+→ Send PreCommit to P3... ✓ VOTE_YES
 
-投票结果: 3/3 同意
+Voting Result: 3/3 Agree
 
-[阶段 3/3] 提交阶段 (COMMIT)
+[Phase 3/3] Commit Phase (COMMIT)
 ------------------------------------------------------------
-→ 发送COMMIT到 P1... ✓ ACK_COMMIT
-→ 发送COMMIT到 P2... ✓ ACK_COMMIT
-→ 发送COMMIT到 P3... ✓ ACK_COMMIT
+→ Send COMMIT to P1... ✓ ACK_COMMIT
+→ Send COMMIT to P2... ✓ ACK_COMMIT
+→ Send COMMIT to P3... ✓ ACK_COMMIT
 
-============================================================
-✓ 事务 a1b2c3d4 提交成功! (3/3 确认)
-============================================================
+===============================================================
+✓ Transaction a1b2c3d4 Committed Successfully! (3/3 Confirmation)
+===================================================================
 ```
 
-同时，在各个参与者终端会看到：
+At the same time, each participant will see the following on their terminal:
 ```
-← 收到: PREPARE (事务 a1b2c3d4)
-  ✓ 准备成功，投票 YES
+← Received: PREPARE (transaction a1b2c3d4)
+✓ Prepared successfully, voted YES
 
-← 收到: COMMIT (事务 a1b2c3d4)
-  ✓ 事务已提交
-  数据: {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
+← Received: COMMIT (transaction a1b2c3d4)
+✓ Transaction committed
+Data: {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
 ```
 
-### 步骤4: 查看参与者数据
+### Step 4: View participant data
 
-在任一参与者终端：
+On any participant terminal:
 ```
 P1> data
 ```
 
-输出：
+Output:
 ```
-已提交的事务数据 (1):
-  a1b2c3d4: {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
+Committed transaction data (1):
+a1b2c3d4: {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
 ```
 
-### 步骤5: 模拟失败场景
+### Step 5: Simulate failure scenario
 
-在P2 Vote no
+On P2 Vote no
 
-再次在协调者发起事务：
+Initiate transaction again on the coordinator:
 ```
 coordinator> tx
 data> account=bob,amount=50,operation=withdraw
 ```
 
-这次你会看到事务被中止：
+This time you'll see the transaction aborted:
 ```
-============================================================
-开始新事务: e5f6g7h8
-事务数据: {'account': 'bob', 'amount': '50', 'operation': 'withdraw'}
-参与者数量: 3
-============================================================
+======================================================================
+Start new transaction: e5f6g7h8
+Transaction data: {'account': 'bob', 'amount': '50', 'operation': 'withdraw'}
+Number of participants: 3
+=================================================================
 
-[阶段 1/3] CanCommit阶段 (CanCommit)
+[Phase 1/3] CanCommit phase (CanCommit)
 ------------------------------------------------------------
-→ 发送CanCommit到 P1... ✓ VOTE_NO
-→ 发送CanCommit到 P2... ✓ VOTE_YES
-→ 发送CanCommit到 P3... ✓ VOTE_YES
+→ Send CanCommit to P1... ✓ VOTE_NO
+→ Send CanCommit to P2... ✓ VOTE_YES
+→ Send CanCommit to P3... ✓ VOTE_YES
 
-投票结果: 2/3 同意
+Voting result: 2/3 agree
 
-[阶段 3/3] 中止阶段 (ABORT)
+[Phase 3/3] Abort phase (ABORT)
 ------------------------------------------------------------
-→ 发送COMMIT到 P1... ✓ ACK_ABORT
-→ 发送COMMIT到 P2... ✓ ACK_ABORT
-→ 发送COMMIT到 P3... ✓ ACK_ABORT
+→ Send COMMIT to P1... ✓ ACK_ABORT
+→ Send COMMIT to P2... ✓ ACK_ABORT
+→ Send COMMIT to P3... ✓ ACK_ABORT
 
-============================================================
-✗ 事务 e5f6g7h8 已中止
-============================================================
+================================================================
+✗ Transaction e5f6g7h8 Aborted
+==============================================================
 ```
 
-在P2终端会看到：
+You will see the following in the P2 terminal:
 ```
 
-← 收到: ABORT (事务 e5f6g7h8)
-  ✓ 事务已中止
+← Received: ABORT (transaction e5f6g7h8)
+✓ Transaction aborted
 ```
 
-### 步骤6: 查看事务状态
+### Step 6: View transaction status
 
-在协调者终端：
+In the coordinator terminal:
 ```
 coordinator> status
 ```
 
-输出：
+Output:
 ```
-事务历史 (2):
-  a1b2c3d4: COMMITTED - {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
-  e5f6g7h8: ABORTED - {'account': 'bob', 'amount': '50', 'operation': 'withdraw'}
+Transaction history (2):
+a1b2c3d4: COMMITTED - {'account': 'alice', 'amount': '100', 'operation': 'deposit'}
+e5f6g7h8: ABORTED - {'account': 'bob', 'amount': '50', 'operation': 'withdraw'
 ```
 
+## Shutdown the system
 
-## 关闭系统
+Enter the `quit` command in all terminals, or press Ctrl+C.
 
-在所有终端中输入 `quit` 命令，或按 Ctrl+C。
+Recommended order:
 
-建议顺序：
-1. 先关闭所有参与者
-2. 最后关闭协调者
+1. Shut down all participants first
 
+2. Shut down the coordinator last
