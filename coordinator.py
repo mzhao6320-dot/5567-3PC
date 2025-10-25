@@ -1,5 +1,5 @@
 """
-3PC协议 - Coordinator
+3PC - Coordinator
 """
 import socket
 import threading
