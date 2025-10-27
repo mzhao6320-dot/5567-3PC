@@ -440,9 +440,12 @@ class Participant:
             if ack_type == MessageType.ACK_COMMIT:
                 print(f"  ✓ Confirmed COMMIT")
             else:
+                self.waited_transactions.remove(transaction_id)
                 print(f"  ✓ Confirmed ABORT")
         except Exception as e:
-            print(f"Failed to send ACK: {e}")
+            if ack_type == MessageType.ACK_ABORT:
+                print(f"  ✓ Confirmed ABORT")
+            # print(f"Failed to send ACK: {e}")
     
     def _request_history_from_coordinator(self):
         """Request the historical log from the coordinator"""
