@@ -104,7 +104,7 @@ class Coordinator:
                             tx['votes'][participant_id] = False
                         elif message.msg_type == MessageType.PRECOMMIT_VOTE_YES:
                             tx['votep'][participant_id] = True
-                        else:
+                        elif message.msg_type == MessageType.PRECOMMIT_VOTE_NO:
                             tx['votep'][participant_id] = False
             
             elif request_type == 'ACK_RESPONSE' and len(parts) >= 3:
@@ -401,6 +401,8 @@ class Coordinator:
 
                     with self.lock:
                         current_acks = self.transactions[transaction_id]['acks']
+                        # print(current_acks) # test
+                        # print(participant_list) # test
                         if len(current_acks) == len(participant_list):
                             print(f"  Receive {len(current_acks)}/{len(participant_list)} ACK responses ({wait_time}s)")
                             break
@@ -462,21 +464,21 @@ class Coordinator:
                     print(f"{'=' * 60}")
                     return True
             else:
-                print(f"\n[Phase 3/3] PRECOMMIT ABORT")
+                print(f"\n[Phase 3/3] Abort Phase (PRECOMMIT_ABORT)")
                 print("-" * 60)
                 self.transactions[transaction_id]['status'] = 'ABORTING'
 
-                abort_msg = Message(MessageType.PRECOMMIT_ABORT, transaction_id, transaction_data)
+                abort_msg = Message(MessageType.CANCOMMIT_ABORT, transaction_id, transaction_data)
                 acks = {}
 
                 # Send the PRECOMMIT ABORT message (participants will manually ACK and will not respond immediately)
                 for participant_id in self.participants.keys():
                     # Check for a crash before sending
                     if self.crashed:
-                        print(f"\n💥 The coordinator has collapsed! Some participants did not receive the PRECOMMIT ABORT")
+                        print(f"\n💥 The coordinator has crashed! Some participants did not receive CANCOMMIT ABORT")
                         return False
 
-                    print(f"→ Send PRECOMMIT ABORT to {participant_id}...", end=" ")
+                    print(f"→ Send CANCOMMIT ABORT to {participant_id}...", end=" ")
                     response = self._send_message(participant_id, abort_msg)
 
                     # Some participants might respond immediately
@@ -500,6 +502,8 @@ class Coordinator:
 
                     with self.lock:
                         current_acks = self.transactions[transaction_id]['acks']
+                        print(current_acks) # test
+                        print(participant_list)
                         if len(current_acks) == len(participant_list):
                             print(f"  Receive {len(current_acks)}/{len(participant_list)} ACK responses ({wait_time}s)")
                             break
